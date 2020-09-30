@@ -8,7 +8,7 @@ public class Application {
     public static void main(String[] args) {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
         Movie movie = new Movie();
-        movie.setTitle("Fast and Furious");
+        movie.setTitle("Fast & Furious");
         movieService.add(movie);
         movieService.getAll().forEach(System.out::println);
     }
