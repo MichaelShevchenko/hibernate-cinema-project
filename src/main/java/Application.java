@@ -1,12 +1,15 @@
-import org.apache.log4j.Logger;
+import com.dev.cinema.lib.Injector;
+import com.dev.cinema.model.Movie;
+import com.dev.cinema.service.MovieService;
 
 public class Application {
-    private static final Logger LOGGER = Logger.getLogger(Application.class);
+    private static Injector injector = Injector.getInstance("com.dev.cinema");
 
     public static void main(String[] args) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("This is debug message. Web server is up, application started.");
-        }
-        System.out.println("Hello world");
+        MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
+        Movie movie = new Movie();
+        movie.setTitle("Fast & Furious");
+        movieService.add(movie);
+        movieService.getAll().forEach(System.out::println);
     }
 }
