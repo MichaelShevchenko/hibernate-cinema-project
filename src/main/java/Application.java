@@ -9,6 +9,7 @@ public class Application {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
         Movie movie = new Movie();
         movie.setTitle("Fast & Furious");
+        movie.setDescription("action");
         movieService.add(movie);
         movieService.getAll().forEach(System.out::println);
     }
