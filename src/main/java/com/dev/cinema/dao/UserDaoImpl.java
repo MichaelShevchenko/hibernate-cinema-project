@@ -1,0 +1,49 @@
+package com.dev.cinema.dao;
+
+import com.dev.cinema.lib.Dao;
+import com.dev.cinema.model.User;
+import com.dev.cinema.util.HibernateUtil;
+import java.util.Optional;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+@Dao
+public class UserDaoImpl implements UserDao {
+    @Override
+    public User add(User user) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.save(user);
+            transaction.commit();
+            return user;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Can't insert user entity", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+            Root<User> root = criteriaQuery.from(User.class);
+            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), email));
+            return session.createQuery(criteriaQuery).uniqueResultOptional();   // ???
+        } catch (Exception e) {
+            throw new RuntimeException("Couldn't find the user by provided email: ", e);
+        }
+    }
+}
