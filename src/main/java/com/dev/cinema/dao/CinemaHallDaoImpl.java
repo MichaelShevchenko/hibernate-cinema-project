@@ -25,7 +25,7 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't add CinemaHall entity", e);
+            throw new DataProcessingException("Can't add CinemaHall entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -36,8 +36,8 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
     @Override
     public List<CinemaHall> getAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<CinemaHall> getAllCinemaHalls = session
-                                                .createQuery("from CinemaHall", CinemaHall.class);
+            Query<CinemaHall> getAllCinemaHalls =
+                    session.createQuery("from CinemaHall", CinemaHall.class);
             return getAllCinemaHalls.getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Error in retrieving all CinemaHalls occurred: ", e);
