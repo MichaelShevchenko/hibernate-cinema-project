@@ -29,8 +29,8 @@ public class Application {
         movieService.add(movie2);
         movieService.getAll().forEach(System.out::println);
 
-        CinemaHallService cinemaHallService = (CinemaHallService) injector
-                                            .getInstance(CinemaHallService.class);
+        CinemaHallService cinemaHallService =
+                (CinemaHallService) injector.getInstance(CinemaHallService.class);
         CinemaHall cinemaHall = new CinemaHall();
         cinemaHall.setCapacity(100);
         cinemaHall.setDescription("normal");
@@ -82,8 +82,8 @@ public class Application {
         userService.add(explorer);
         System.out.println(userService.findByEmail("diagram@mit.com"));
 
-        AuthenticationService authenticationService = (AuthenticationService) injector
-                                                    .getInstance(AuthenticationService.class);
+        AuthenticationService authenticationService =
+                (AuthenticationService) injector.getInstance(AuthenticationService.class);
         authenticationService.register("ranger@gmail.com", "M@rtia1Arts");
         System.out.println(authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
     }

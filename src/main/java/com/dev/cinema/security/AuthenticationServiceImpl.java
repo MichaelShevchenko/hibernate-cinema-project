@@ -22,12 +22,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         throw new AuthenticationException("Incorrect username or password");
     }
 
-    /**
-     * We should register a new user. New user entity will contains the email and password
-     * @param email - user email. should be unique for each user
-     * @param password - user password
-     * @return new user instance
-     */
     @Override
     public User register(String email, String password) {
         User newUser = new User();

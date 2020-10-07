@@ -1,5 +1,6 @@
 package com.dev.cinema.dao;
 
+import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.User;
 import com.dev.cinema.util.HibernateUtil;
@@ -26,7 +27,7 @@ public class UserDaoImpl implements UserDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't insert user entity", e);
+            throw new DataProcessingException("Can't insert " + user + " entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -41,9 +42,7 @@ public class UserDaoImpl implements UserDao {
             CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
             Root<User> root = criteriaQuery.from(User.class);
             criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), email));
-            return session.createQuery(criteriaQuery).uniqueResultOptional();   // ???
-        } catch (Exception e) {
-            throw new RuntimeException("Couldn't find the user by provided email: ", e);
+            return session.createQuery(criteriaQuery).uniqueResultOptional();
         }
     }
 }
