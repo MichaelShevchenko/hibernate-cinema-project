@@ -56,8 +56,8 @@ public class Application {
         movieSession4.setShowTime(LocalDateTime.of(LocalDate.now().plusDays(1),
                                                     LocalTime.of(0, 0)));
 
-        MovieSessionService movieSessionService = (MovieSessionService) injector
-                                                .getInstance(MovieSessionService.class);
+        MovieSessionService movieSessionService =
+                (MovieSessionService) injector.getInstance(MovieSessionService.class);
         movieSessionService.add(movieSession);
         movieSessionService.add(movieSession2);
         movieSessionService.add(movieSession3);

@@ -30,7 +30,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can't insert MovieSession entity", e);
+            throw new DataProcessingException("Can't insert " + session + " entity", e);
         } finally {
             if (hibernateSession != null) {
                 hibernateSession.close();
@@ -45,16 +45,12 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             CriteriaQuery<MovieSession> criteriaQuery =
                             criteriaBuilder.createQuery(MovieSession.class);
             Root<MovieSession> root = criteriaQuery.from(MovieSession.class);
-            Predicate first = criteriaBuilder.equal(root.get("movie"), movieId);
-            Predicate second = criteriaBuilder.greaterThanOrEqualTo(root
-                            .get("showTime"), date.atStartOfDay());
-            Predicate third = criteriaBuilder.lessThan(root
-                            .get("showTime"), date.atTime(LocalTime.MAX));
-            Predicate allConditions = criteriaBuilder.and(first, second, third);
+            Predicate moviePredicate = criteriaBuilder.equal(root.get("movie"), movieId);
+            Predicate datePredicate = criteriaBuilder.between(root.get("showTime"),
+                                        date.atStartOfDay(), date.atTime(LocalTime.MAX));
+            Predicate allConditions = criteriaBuilder.and(moviePredicate, datePredicate);
             criteriaQuery.select(root).where(allConditions);
             return session.createQuery(criteriaQuery).getResultList();
-        } catch (Exception e) {
-            throw new DataProcessingException("Couldn't get the list of available sessions: ", e);
         }
     }
 }
