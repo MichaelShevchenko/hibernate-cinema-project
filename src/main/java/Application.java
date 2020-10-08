@@ -1,10 +1,14 @@
+import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.model.User;
+import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,8 +16,7 @@ import java.time.LocalTime;
 public class Application {
     private static Injector injector = Injector.getInstance("com.dev.cinema");
 
-    public static void main(String[] args) {
-        System.out.println("test start");
+    public static void main(String[] args) throws AuthenticationException {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
         Movie movie1 = new Movie();
         movie1.setTitle("Fast & Furious");
@@ -26,8 +29,8 @@ public class Application {
         movieService.add(movie2);
         movieService.getAll().forEach(System.out::println);
 
-        CinemaHallService cinemaHallService = (CinemaHallService) injector
-                                            .getInstance(CinemaHallService.class);
+        CinemaHallService cinemaHallService =
+                (CinemaHallService) injector.getInstance(CinemaHallService.class);
         CinemaHall cinemaHall = new CinemaHall();
         cinemaHall.setCapacity(100);
         cinemaHall.setDescription("normal");
@@ -63,5 +66,25 @@ public class Application {
         movieSessionService.add(movieSession3);
         movieSessionService.add(movieSession4);
         movieSessionService.findAvailableSessions(2L, LocalDate.now()).forEach(System.out::println);
+
+        UserService userService = (UserService) injector.getInstance(UserService.class);
+        User visitor = new User();
+        visitor.setEmail("jackie@yandex.com");
+        visitor.setPassword("p@ssw0rd");
+        userService.add(visitor);
+        User buyer = new User();
+        buyer.setEmail("texas.ranger@gmail.com");
+        buyer.setPassword("M@rtia1Arts");
+        userService.add(buyer);
+        User explorer = new User();
+        explorer.setEmail("diagram@mit.com");
+        explorer.setPassword("N0be1Prize");
+        userService.add(explorer);
+        System.out.println(userService.findByEmail("diagram@mit.com"));
+
+        AuthenticationService authenticationService =
+                (AuthenticationService) injector.getInstance(AuthenticationService.class);
+        authenticationService.register("ranger@gmail.com", "M@rtia1Arts");
+        System.out.println(authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
     }
 }
