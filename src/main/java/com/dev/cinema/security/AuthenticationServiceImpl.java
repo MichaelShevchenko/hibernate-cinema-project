@@ -16,7 +16,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User login(String email, String password) throws AuthenticationException {
         Optional<User> userFromDB = userService.findByEmail(email);
-        if (userFromDB.isPresent() && isValidPassword(password, userFromDB.get())) {
+        if (userFromDB.isPresent() && isPasswordValid(password, userFromDB.get())) {
             return userFromDB.get();
         }
         throw new AuthenticationException("Incorrect username or password");
@@ -30,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userService.add(newUser);
     }
 
-    private boolean isValidPassword(String password, User userFromDbPassword) {
+    private boolean isPasswordValid(String password, User userFromDbPassword) {
         return HashUtil.hashPassword(password, userFromDbPassword.getSalt())
                 .equals(userFromDbPassword.getPassword());
     }
