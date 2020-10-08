@@ -44,7 +44,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
                                         criteriaBuilder.createQuery(ShoppingCart.class);
             Root<ShoppingCart> root = criteriaQuery.from(ShoppingCart.class);
             criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("user"), user.getId()));
-            ShoppingCart userShoppingCart = session.createQuery(criteriaQuery).getSingleResult();
+            ShoppingCart userShoppingCart = session.createQuery(criteriaQuery).uniqueResult();
             Hibernate.initialize(userShoppingCart.getTickets());
             return userShoppingCart;
         }
