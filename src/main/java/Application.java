@@ -96,5 +96,6 @@ public class Application {
         shoppingCartService.addSession(movieSession2, testShoppingCart);
         System.out.println(shoppingCartService.getByUser(testShoppingCart));
         shoppingCartService.clear(shoppingCartService.getByUser(testShoppingCart));
+        System.out.println(shoppingCartService.getByUser(testShoppingCart));
     }
 }
