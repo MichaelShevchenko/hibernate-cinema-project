@@ -8,6 +8,7 @@ import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -86,5 +87,15 @@ public class Application {
                 (AuthenticationService) injector.getInstance(AuthenticationService.class);
         authenticationService.register("ranger@gmail.com", "M@rtia1Arts");
         System.out.println(authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
+
+        ShoppingCartService shoppingCartService =
+                (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
+        User testShoppingCart = userService.findByEmail("ranger@gmail.com").get();
+        shoppingCartService.addSession(movieSession2, testShoppingCart);
+        shoppingCartService.addSession(movieSession4, testShoppingCart);
+        shoppingCartService.addSession(movieSession2, testShoppingCart);
+        System.out.println(shoppingCartService.getByUser(testShoppingCart));
+        shoppingCartService.clear(shoppingCartService.getByUser(testShoppingCart));
+        System.out.println(shoppingCartService.getByUser(testShoppingCart));
     }
 }
