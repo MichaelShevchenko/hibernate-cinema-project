@@ -16,10 +16,9 @@ public class ShoppingCart {
     @Id
     private Long id;
     @OneToMany
-    @JoinTable(name = "shoppingCarts_tickets",
+    @JoinTable(name = "shopping_carts_tickets",
             joinColumns =
-                    { @JoinColumn(name = "shopping_сart_id",
-                            referencedColumnName = "shopping_cart_id") })
+                    { @JoinColumn(name = "shopping_сart_id") })
     private List<Ticket> tickets;
     @OneToOne
     @MapsId
