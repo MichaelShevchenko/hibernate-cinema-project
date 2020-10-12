@@ -110,7 +110,7 @@ public class Application {
         orderService.completeOrder(shoppingCartService.getByUser(visitor).getTickets(), visitor);
         List<Order> ordersHistory = orderService.getOrderHistory(visitor);
         for (Order singleOrder: ordersHistory) {
-            System.out.println(singleOrder.toString());
+            System.out.println(singleOrder);
         }
     }
 }

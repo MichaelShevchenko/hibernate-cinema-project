@@ -1,5 +1,6 @@
 package com.dev.cinema.dao;
 
+import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.Order;
 import com.dev.cinema.model.User;
@@ -9,7 +10,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -29,7 +29,7 @@ public class OrderDaoImpl implements OrderDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't create " + order + " entity", e);
+            throw new DataProcessingException("Can't create " + order + " entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -44,13 +44,10 @@ public class OrderDaoImpl implements OrderDao {
             CriteriaQuery<Order> criteriaQuery = criteriaBuilder
                     .createQuery(Order.class);
             Root<Order> root = criteriaQuery.from(Order.class);
+            root.fetch("tickets");
             Predicate selectUser = criteriaBuilder.equal(root.get("user"), user.getId());
             criteriaQuery.select(root).where(selectUser);
-            List<Order> orderHistory = session.createQuery(criteriaQuery).getResultList();
-            for (Order order : orderHistory) {
-                Hibernate.initialize(order.getTickets());
-            }
-            return orderHistory;
+            return session.createQuery(criteriaQuery).getResultList();
         }
     }
 }
