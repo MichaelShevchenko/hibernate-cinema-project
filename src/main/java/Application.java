@@ -91,9 +91,19 @@ public class Application {
 
         AuthenticationService authenticationService =
                 (AuthenticationService) injector.getInstance(AuthenticationService.class);
-        authenticationService.register("ranger@gmail.com", "M@rtia1Arts");
-        LOGGER.info("Attempt to login using AuthenticationService for email texas.ranger@gmail.com "
-                + authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
+        try {
+            LOGGER.info("Expected to register a new user with ranger@gmail.com email:\n "
+                    + authenticationService.register("ranger@gmail.com", "M@rtia1Arts"));
+        } catch (Exception e) {
+            LOGGER.warn("Registration new user with email ranger@gmail.com failed: " + e);
+        }
+        try {
+            LOGGER.info("Attempt to login for texas.ranger@gmail.com email "
+                    + authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
+        } catch (Exception e) {
+            LOGGER.warn("Login user with texas.ranger@gmail.com email "
+                    + "and M@rtia1Arts password failed: " + e);
+        }
 
         ShoppingCartService shoppingCartService =
                 (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
