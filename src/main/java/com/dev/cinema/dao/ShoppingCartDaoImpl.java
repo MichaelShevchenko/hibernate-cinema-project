@@ -8,14 +8,18 @@ import com.dev.cinema.util.HibernateUtil;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Dao
 public class ShoppingCartDaoImpl implements ShoppingCartDao {
+    private static final Logger LOGGER = Logger.getLogger(ShoppingCartDaoImpl.class);
+
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
+        LOGGER.info("Calling add() method to create a new shopping cart in ShoppingCartDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -23,6 +27,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
             transaction = session.beginTransaction();
             session.save(shoppingCart);
             transaction.commit();
+            LOGGER.info("Successfully added new shopping cart " + shoppingCart + " to the DB.");
             return shoppingCart;
         } catch (Exception e) {
             if (transaction != null) {
@@ -38,6 +43,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
     @Override
     public ShoppingCart getByUser(User user) {
+        LOGGER.info("Attempt to get shopping cart for provided user: " + user);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<ShoppingCart> criteriaQuery =
@@ -52,6 +58,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
     @Override
     public void update(ShoppingCart shoppingCart) {
+        LOGGER.info("Calling update() method to update provided shopping cart: " + shoppingCart);
         Transaction transaction = null;
         Session session = null;
         try {

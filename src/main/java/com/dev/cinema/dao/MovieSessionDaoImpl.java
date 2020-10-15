@@ -11,13 +11,17 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Dao
 public class MovieSessionDaoImpl implements MovieSessionDao {
+    private static final Logger LOGGER = Logger.getLogger(MovieSessionDaoImpl.class);
+
     @Override
     public MovieSession add(MovieSession session) {
+        LOGGER.info("Calling add() method to create a new Movie Session in MovieSessionDaoImpl");
         Transaction transaction = null;
         Session hibernateSession = null;
         try {
@@ -25,6 +29,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             transaction = hibernateSession.beginTransaction();
             hibernateSession.save(session);
             transaction.commit();
+            LOGGER.info("Successfully added new movie session " + session + " to the DB.");
             return session;
         } catch (Exception e) {
             if (transaction != null) {
@@ -40,6 +45,8 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
+        LOGGER.info("Attempt to find available sessions on " + date + " for provided movieID: "
+                + movieId);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<MovieSession> criteriaQuery =

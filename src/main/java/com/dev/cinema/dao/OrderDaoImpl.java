@@ -11,13 +11,17 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Dao
 public class OrderDaoImpl implements OrderDao {
+    private static final Logger LOGGER = Logger.getLogger(OrderDaoImpl.class);
+
     @Override
     public Order create(Order order) {
+        LOGGER.info("Calling add() method to create a new order in OrderDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -25,6 +29,7 @@ public class OrderDaoImpl implements OrderDao {
             transaction = session.beginTransaction();
             session.save(order);
             transaction.commit();
+            LOGGER.info("Successfully added new order " + order + " to the DB.");
             return order;
         } catch (Exception e) {
             if (transaction != null) {
@@ -40,6 +45,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrderHistory(User user) {
+        LOGGER.info("Attempt to get order history for provided user: " + user);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Order> criteriaQuery = criteriaBuilder

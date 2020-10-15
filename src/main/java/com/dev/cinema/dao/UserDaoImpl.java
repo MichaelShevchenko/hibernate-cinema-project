@@ -8,13 +8,17 @@ import java.util.Optional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Dao
 public class UserDaoImpl implements UserDao {
+    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
+
     @Override
     public User add(User user) {
+        LOGGER.info("Calling add() method to create a new user in UserDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -22,6 +26,7 @@ public class UserDaoImpl implements UserDao {
             transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
+            LOGGER.info("Successfully added new user " + user + " to the DB.");
             return user;
         } catch (Exception e) {
             if (transaction != null) {
@@ -37,6 +42,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
+        LOGGER.info("Attempt to find user by provided email: " + email);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);

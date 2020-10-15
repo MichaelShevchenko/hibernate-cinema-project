@@ -6,13 +6,16 @@ import com.dev.cinema.model.Movie;
 import com.dev.cinema.util.HibernateUtil;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Dao
 public class MovieDaoImpl implements MovieDao {
+    private static final Logger LOGGER = Logger.getLogger(MovieDaoImpl.class);
     @Override
     public Movie add(Movie movie) {
+        LOGGER.info("Calling add() method to create a new movie in MovieDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -20,6 +23,7 @@ public class MovieDaoImpl implements MovieDao {
             transaction = session.beginTransaction();
             session.save(movie);
             transaction.commit();
+            LOGGER.info("Successfully added new movie " + movie + " to the DB.");
             return movie;
         } catch (Exception e) {
             if (transaction != null) {
@@ -35,6 +39,7 @@ public class MovieDaoImpl implements MovieDao {
 
     @Override
     public List<Movie> getAll() {
+        LOGGER.info("Attempt to get all movies");
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaQuery<Movie> criteriaQuery =
                     session.getCriteriaBuilder().createQuery(Movie.class);
