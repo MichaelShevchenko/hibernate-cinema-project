@@ -12,12 +12,11 @@ import com.dev.cinema.service.MovieSessionService;
 import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
-import org.apache.log4j.Logger;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class Application {
     private static Injector injector = Injector.getInstance("com.dev.cinema");
@@ -93,7 +92,7 @@ public class Application {
         AuthenticationService authenticationService =
                 (AuthenticationService) injector.getInstance(AuthenticationService.class);
         authenticationService.register("ranger@gmail.com", "M@rtia1Arts");
-        LOGGER.info("Attempt to login using Authentication Service for email: texas.ranger@gmail.com "
+        LOGGER.info("Attempt to login using AuthenticationService for email texas.ranger@gmail.com "
                 + authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
 
         ShoppingCartService shoppingCartService =
