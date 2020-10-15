@@ -18,7 +18,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User add(User user) {
-        LOGGER.info("Calling add() method to create a new user in UserDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -42,7 +41,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        LOGGER.info("Attempt to find user by provided email: " + email);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);

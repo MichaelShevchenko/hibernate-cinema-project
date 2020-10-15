@@ -16,7 +16,6 @@ public class MovieDaoImpl implements MovieDao {
 
     @Override
     public Movie add(Movie movie) {
-        LOGGER.info("Calling add() method to create a new movie in MovieDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -40,7 +39,6 @@ public class MovieDaoImpl implements MovieDao {
 
     @Override
     public List<Movie> getAll() {
-        LOGGER.info("Attempt to get all movies");
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaQuery<Movie> criteriaQuery =
                     session.getCriteriaBuilder().createQuery(Movie.class);

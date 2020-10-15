@@ -21,7 +21,6 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
     public MovieSession add(MovieSession session) {
-        LOGGER.info("Calling add() method to create a new Movie Session in MovieSessionDaoImpl");
         Transaction transaction = null;
         Session hibernateSession = null;
         try {
@@ -45,8 +44,6 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
-        LOGGER.info("Attempt to find available sessions on " + date + " for provided movieID: "
-                + movieId);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<MovieSession> criteriaQuery =

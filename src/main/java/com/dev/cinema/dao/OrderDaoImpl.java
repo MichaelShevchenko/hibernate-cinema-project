@@ -21,7 +21,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order create(Order order) {
-        LOGGER.info("Calling add() method to create a new order in OrderDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -45,7 +44,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrderHistory(User user) {
-        LOGGER.info("Attempt to get order history for provided user: " + user);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Order> criteriaQuery = criteriaBuilder

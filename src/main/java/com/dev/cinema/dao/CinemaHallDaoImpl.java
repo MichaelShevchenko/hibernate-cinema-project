@@ -16,7 +16,6 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
 
     @Override
     public CinemaHall add(CinemaHall cinemaHall) {
-        LOGGER.info("Calling add() method to create a new Cinema Hall in CinemaHallDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -40,7 +39,6 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
 
     @Override
     public List<CinemaHall> getAll() {
-        LOGGER.info("Attempt to get all available Cinema Hall");
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<CinemaHall> getAllCinemaHalls =
                     session.createQuery("from CinemaHall", CinemaHall.class);

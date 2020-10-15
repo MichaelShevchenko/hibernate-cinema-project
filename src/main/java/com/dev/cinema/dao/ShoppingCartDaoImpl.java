@@ -19,7 +19,6 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
-        LOGGER.info("Calling add() method to create a new shopping cart in ShoppingCartDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
@@ -43,7 +42,6 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
     @Override
     public ShoppingCart getByUser(User user) {
-        LOGGER.info("Attempt to get shopping cart for provided user: " + user);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<ShoppingCart> criteriaQuery =

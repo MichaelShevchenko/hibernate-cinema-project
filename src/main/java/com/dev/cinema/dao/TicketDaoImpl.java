@@ -14,7 +14,6 @@ public class TicketDaoImpl implements TicketDao {
 
     @Override
     public Ticket add(Ticket ticket) {
-        LOGGER.info("Calling add() method to create a new ticket in TicketDaoImpl");
         Transaction transaction = null;
         Session session = null;
         try {
