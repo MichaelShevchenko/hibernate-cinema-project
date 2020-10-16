@@ -1,6 +1,5 @@
 package com.dev.cinema.dao;
 
-import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.Order;
 import com.dev.cinema.model.User;
@@ -11,37 +10,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 @Dao
-public class OrderDaoImpl implements OrderDao {
-    private static final Logger LOGGER = Logger.getLogger(OrderDaoImpl.class);
-
-    @Override
-    public Order create(Order order) {
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            transaction = session.beginTransaction();
-            session.save(order);
-            transaction.commit();
-            LOGGER.info("Successfully added new order " + order + " to the DB.");
-            return order;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't create " + order + " entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
-
+public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     @Override
     public List<Order> getOrderHistory(User user) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

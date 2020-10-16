@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 public class Application {
     private static Injector injector = Injector.getInstance("com.dev.cinema");
-    private static final Logger LOGGER = Logger.getLogger(Application.class);
+    private static final Logger logger = Logger.getLogger(Application.class);
 
     public static void main(String[] args) throws AuthenticationException {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
@@ -32,7 +32,7 @@ public class Application {
         movie2.setTitle("Matrix");
         movie2.setDescription("Science fiction");
         movieService.add(movie2);
-        movieService.getAll().forEach(movie -> LOGGER.info(movie.toString()));
+        movieService.getAll().forEach(movie -> logger.info(movie));
 
         CinemaHallService cinemaHallService =
                 (CinemaHallService) injector.getInstance(CinemaHallService.class);
@@ -44,7 +44,7 @@ public class Application {
         cinemaHall1.setCapacity(35);
         cinemaHall1.setDescription("luxury");
         cinemaHallService.add(cinemaHall1);
-        cinemaHallService.getAll().forEach(hall -> LOGGER.info(hall.toString()));
+        cinemaHallService.getAll().forEach(hall -> logger.info(hall));
 
         MovieSession movieSession = new MovieSession();
         movieSession.setCinemaHall(cinemaHall);
@@ -71,7 +71,7 @@ public class Application {
         movieSessionService.add(movieSession3);
         movieSessionService.add(movieSession4);
         movieSessionService.findAvailableSessions(2L, LocalDate.now())
-                .forEach(session -> LOGGER.info(session.toString()));
+                .forEach(session -> logger.info(session));
 
         UserService userService = (UserService) injector.getInstance(UserService.class);
         User visitor = new User();
@@ -86,22 +86,22 @@ public class Application {
         explorer.setEmail("diagram@mit.com");
         explorer.setPassword("N0be1Prize");
         userService.add(explorer);
-        LOGGER.info("Attempt to find user with email diagram@mit.com"
+        logger.info("Attempt to find user with email diagram@mit.com"
                 + userService.findByEmail("diagram@mit.com"));
 
         AuthenticationService authenticationService =
                 (AuthenticationService) injector.getInstance(AuthenticationService.class);
         try {
-            LOGGER.info("Expected to register a new user with ranger@gmail.com email:\n "
+            logger.info("Expected to register a new user with ranger@gmail.com email:\n "
                     + authenticationService.register("ranger@gmail.com", "M@rtia1Arts"));
         } catch (Exception e) {
-            LOGGER.warn("Registration new user with email ranger@gmail.com failed: " + e);
+            logger.warn("Registration new user with email ranger@gmail.com failed: " + e);
         }
         try {
-            LOGGER.info("Attempt to login for texas.ranger@gmail.com email "
+            logger.info("Attempt to login for texas.ranger@gmail.com email "
                     + authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
         } catch (Exception e) {
-            LOGGER.warn("Login user with texas.ranger@gmail.com email "
+            logger.warn("Login user with texas.ranger@gmail.com email "
                     + "and M@rtia1Arts password failed: " + e);
         }
 
@@ -111,10 +111,10 @@ public class Application {
         shoppingCartService.addSession(movieSession2, testUser);
         shoppingCartService.addSession(movieSession4, testUser);
         shoppingCartService.addSession(movieSession2, testUser);
-        LOGGER.info("checking shopping cart availability after registration for testUser: "
+        logger.info("checking shopping cart availability after registration for testUser: "
                 + shoppingCartService.getByUser(testUser));
         shoppingCartService.clear(shoppingCartService.getByUser(testUser));
-        LOGGER.info("checking shopping cart for emptiness after it was cleared: "
+        logger.info("checking shopping cart for emptiness after it was cleared: "
                 + shoppingCartService.getByUser(testUser));
 
         OrderService orderService = (OrderService) injector.getInstance(OrderService.class);
@@ -125,9 +125,9 @@ public class Application {
         shoppingCartService.addSession(movieSession4, visitor);
         orderService.completeOrder(shoppingCartService.getByUser(visitor).getTickets(), visitor);
         List<Order> ordersHistory = orderService.getOrderHistory(visitor);
-        LOGGER.info("checking orders history for visitor user: ");
+        logger.info("checking orders history for visitor user: ");
         for (Order singleOrder: ordersHistory) {
-            LOGGER.info(singleOrder);
+            logger.info(singleOrder);
         }
     }
 }

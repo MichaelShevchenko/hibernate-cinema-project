@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final Logger LOGGER = Logger.getLogger(AuthenticationServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(AuthenticationServiceImpl.class);
     @Inject
     private UserService userService;
     @Inject
@@ -22,7 +22,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public User login(String email, String password) throws AuthenticationException {
         Optional<User> userFromDB = userService.findByEmail(email);
         if (userFromDB.isPresent() && isPasswordValid(password, userFromDB.get())) {
-            LOGGER.info("A user with email: " + email + " has been logged in");
+            logger.info("A user with email: " + email + " has been logged in");
             return userFromDB.get();
         }
         throw new AuthenticationException("Incorrect username or password");
@@ -35,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         newUser.setPassword(password);
         userService.add(newUser);
         shoppingCartService.registerNewShoppingCart(newUser);
-        LOGGER.info("Registered a new user with email: " + email + " and added shopping cart");
+        logger.info("Registered a new user with email: " + email + " and added shopping cart");
         return newUser;
     }
 
