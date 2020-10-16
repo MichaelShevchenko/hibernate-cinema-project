@@ -16,9 +16,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class Application {
     private static Injector injector = Injector.getInstance("com.dev.cinema");
+    private static final Logger logger = Logger.getLogger(Application.class);
 
     public static void main(String[] args) throws AuthenticationException {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
@@ -26,12 +28,11 @@ public class Application {
         movie1.setTitle("Fast & Furious");
         movie1.setDescription("action");
         movieService.add(movie1);
-        movieService.getAll().forEach(System.out::println);
         Movie movie2 = new Movie();
         movie2.setTitle("Matrix");
         movie2.setDescription("Science fiction");
         movieService.add(movie2);
-        movieService.getAll().forEach(System.out::println);
+        movieService.getAll().forEach(logger::info);
 
         CinemaHallService cinemaHallService =
                 (CinemaHallService) injector.getInstance(CinemaHallService.class);
@@ -43,7 +44,7 @@ public class Application {
         cinemaHall1.setCapacity(35);
         cinemaHall1.setDescription("luxury");
         cinemaHallService.add(cinemaHall1);
-        cinemaHallService.getAll().forEach(System.out::println);
+        cinemaHallService.getAll().forEach(logger::info);
 
         MovieSession movieSession = new MovieSession();
         movieSession.setCinemaHall(cinemaHall);
@@ -69,7 +70,8 @@ public class Application {
         movieSessionService.add(movieSession2);
         movieSessionService.add(movieSession3);
         movieSessionService.add(movieSession4);
-        movieSessionService.findAvailableSessions(2L, LocalDate.now()).forEach(System.out::println);
+        movieSessionService.findAvailableSessions(2L, LocalDate.now())
+                .forEach(logger::info);
 
         UserService userService = (UserService) injector.getInstance(UserService.class);
         User visitor = new User();
@@ -84,22 +86,36 @@ public class Application {
         explorer.setEmail("diagram@mit.com");
         explorer.setPassword("N0be1Prize");
         userService.add(explorer);
-        System.out.println(userService.findByEmail("diagram@mit.com"));
+        logger.info("Attempt to find user with email diagram@mit.com"
+                + userService.findByEmail("diagram@mit.com"));
 
         AuthenticationService authenticationService =
                 (AuthenticationService) injector.getInstance(AuthenticationService.class);
-        authenticationService.register("ranger@gmail.com", "M@rtia1Arts");
-        System.out.println(authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
+        try {
+            logger.info("Expected to register a new user with ranger@gmail.com email:\n "
+                    + authenticationService.register("ranger@gmail.com", "M@rtia1Arts"));
+        } catch (Exception e) {
+            logger.warn("Registration new user with email ranger@gmail.com failed: " + e);
+        }
+        try {
+            logger.info("Attempt to login for texas.ranger@gmail.com email "
+                    + authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
+        } catch (Exception e) {
+            logger.warn("Login user with texas.ranger@gmail.com email "
+                    + "and M@rtia1Arts password failed: " + e);
+        }
 
         ShoppingCartService shoppingCartService =
                 (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
-        User testShoppingCart = userService.findByEmail("ranger@gmail.com").get();
-        shoppingCartService.addSession(movieSession2, testShoppingCart);
-        shoppingCartService.addSession(movieSession4, testShoppingCart);
-        shoppingCartService.addSession(movieSession2, testShoppingCart);
-        System.out.println(shoppingCartService.getByUser(testShoppingCart));
-        shoppingCartService.clear(shoppingCartService.getByUser(testShoppingCart));
-        System.out.println(shoppingCartService.getByUser(testShoppingCart));
+        User testUser = userService.findByEmail("ranger@gmail.com").get();
+        shoppingCartService.addSession(movieSession2, testUser);
+        shoppingCartService.addSession(movieSession4, testUser);
+        shoppingCartService.addSession(movieSession2, testUser);
+        logger.info("checking shopping cart availability after registration for testUser: "
+                + shoppingCartService.getByUser(testUser));
+        shoppingCartService.clear(shoppingCartService.getByUser(testUser));
+        logger.info("checking shopping cart for emptiness after it was cleared: "
+                + shoppingCartService.getByUser(testUser));
 
         OrderService orderService = (OrderService) injector.getInstance(OrderService.class);
         shoppingCartService.registerNewShoppingCart(visitor);
@@ -109,8 +125,9 @@ public class Application {
         shoppingCartService.addSession(movieSession4, visitor);
         orderService.completeOrder(shoppingCartService.getByUser(visitor).getTickets(), visitor);
         List<Order> ordersHistory = orderService.getOrderHistory(visitor);
+        logger.info("checking orders history for visitor user: ");
         for (Order singleOrder: ordersHistory) {
-            System.out.println(singleOrder);
+            logger.info(singleOrder);
         }
     }
 }

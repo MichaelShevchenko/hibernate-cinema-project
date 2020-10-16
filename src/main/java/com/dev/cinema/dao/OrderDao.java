@@ -4,8 +4,6 @@ import com.dev.cinema.model.Order;
 import com.dev.cinema.model.User;
 import java.util.List;
 
-public interface OrderDao {
-    Order create(Order order);
-
+public interface OrderDao extends GenericDao<Order> {
     List<Order> getOrderHistory(User user);
 }
