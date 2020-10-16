@@ -32,7 +32,7 @@ public class Application {
         movie2.setTitle("Matrix");
         movie2.setDescription("Science fiction");
         movieService.add(movie2);
-        movieService.getAll().forEach(movie -> logger.info(movie));
+        movieService.getAll().forEach(logger::info);
 
         CinemaHallService cinemaHallService =
                 (CinemaHallService) injector.getInstance(CinemaHallService.class);
@@ -44,7 +44,7 @@ public class Application {
         cinemaHall1.setCapacity(35);
         cinemaHall1.setDescription("luxury");
         cinemaHallService.add(cinemaHall1);
-        cinemaHallService.getAll().forEach(hall -> logger.info(hall));
+        cinemaHallService.getAll().forEach(logger::info);
 
         MovieSession movieSession = new MovieSession();
         movieSession.setCinemaHall(cinemaHall);
@@ -71,7 +71,7 @@ public class Application {
         movieSessionService.add(movieSession3);
         movieSessionService.add(movieSession4);
         movieSessionService.findAvailableSessions(2L, LocalDate.now())
-                .forEach(session -> logger.info(session));
+                .forEach(logger::info);
 
         UserService userService = (UserService) injector.getInstance(UserService.class);
         User visitor = new User();
