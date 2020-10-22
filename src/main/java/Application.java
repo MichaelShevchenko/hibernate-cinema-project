@@ -1,5 +1,4 @@
-import com.dev.cinema.exceptions.AuthenticationException;
-import com.dev.cinema.lib.Injector;
+import com.dev.cinema.config.AppConfig;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
@@ -17,13 +16,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Application {
-    private static Injector injector = Injector.getInstance("com.dev.cinema");
     private static final Logger logger = Logger.getLogger(Application.class);
 
-    public static void main(String[] args) throws AuthenticationException {
-        MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext(AppConfig.class);
+        MovieService movieService = context.getBean(MovieService.class);
         Movie movie1 = new Movie();
         movie1.setTitle("Fast & Furious");
         movie1.setDescription("action");
@@ -34,8 +35,7 @@ public class Application {
         movieService.add(movie2);
         movieService.getAll().forEach(logger::info);
 
-        CinemaHallService cinemaHallService =
-                (CinemaHallService) injector.getInstance(CinemaHallService.class);
+        CinemaHallService cinemaHallService = context.getBean(CinemaHallService.class);
         CinemaHall cinemaHall = new CinemaHall();
         cinemaHall.setCapacity(100);
         cinemaHall.setDescription("normal");
@@ -64,8 +64,7 @@ public class Application {
         movieSession4.setShowTime(LocalDateTime.of(LocalDate.now().plusDays(1),
                                                     LocalTime.of(0, 0)));
 
-        MovieSessionService movieSessionService =
-                (MovieSessionService) injector.getInstance(MovieSessionService.class);
+        MovieSessionService movieSessionService = context.getBean(MovieSessionService.class);
         movieSessionService.add(movieSession);
         movieSessionService.add(movieSession2);
         movieSessionService.add(movieSession3);
@@ -73,7 +72,7 @@ public class Application {
         movieSessionService.findAvailableSessions(2L, LocalDate.now())
                 .forEach(logger::info);
 
-        UserService userService = (UserService) injector.getInstance(UserService.class);
+        UserService userService = context.getBean(UserService.class);
         User visitor = new User();
         visitor.setEmail("jackie@yandex.com");
         visitor.setPassword("p@ssw0rd");
@@ -89,8 +88,7 @@ public class Application {
         logger.info("Attempt to find user with email diagram@mit.com"
                 + userService.findByEmail("diagram@mit.com"));
 
-        AuthenticationService authenticationService =
-                (AuthenticationService) injector.getInstance(AuthenticationService.class);
+        AuthenticationService authenticationService = context.getBean(AuthenticationService.class);
         try {
             logger.info("Expected to register a new user with ranger@gmail.com email:\n "
                     + authenticationService.register("ranger@gmail.com", "M@rtia1Arts"));
@@ -105,8 +103,7 @@ public class Application {
                     + "and M@rtia1Arts password failed: " + e);
         }
 
-        ShoppingCartService shoppingCartService =
-                (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
+        ShoppingCartService shoppingCartService = context.getBean(ShoppingCartService.class);
         User testUser = userService.findByEmail("ranger@gmail.com").get();
         shoppingCartService.addSession(movieSession2, testUser);
         shoppingCartService.addSession(movieSession4, testUser);
@@ -117,7 +114,7 @@ public class Application {
         logger.info("checking shopping cart for emptiness after it was cleared: "
                 + shoppingCartService.getByUser(testUser));
 
-        OrderService orderService = (OrderService) injector.getInstance(OrderService.class);
+        OrderService orderService = context.getBean(OrderService.class);
         shoppingCartService.registerNewShoppingCart(visitor);
         shoppingCartService.addSession(movieSession3, visitor);
         orderService.completeOrder(shoppingCartService.getByUser(visitor).getTickets(), visitor);
