@@ -1,17 +1,21 @@
 package com.dev.cinema.dao;
 
-import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.Movie;
-import com.dev.cinema.util.HibernateUtil;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 
-@Dao
+@Repository
 public class MovieDaoImpl extends GenericDaoImpl<Movie> implements MovieDao {
+    public MovieDaoImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
+
     @Override
     public List<Movie> getAll() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             CriteriaQuery<Movie> criteriaQuery =
                     session.getCriteriaBuilder().createQuery(Movie.class);
             criteriaQuery.from(Movie.class);
