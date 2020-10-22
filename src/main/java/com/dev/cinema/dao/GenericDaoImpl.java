@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GenericDaoImpl<T> implements GenericDao<T> {
     private static final Logger logger = Logger.getLogger(OrderDaoImpl.class);
-    protected SessionFactory sessionFactory;
+    protected final SessionFactory sessionFactory;
 
     @Autowired
     public GenericDaoImpl(SessionFactory sessionFactory) {
