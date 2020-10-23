@@ -7,6 +7,9 @@ import com.dev.cinema.service.MovieSessionService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,7 @@ public class MovieSessionController {
     private final MovieSessionService movieSessionService;
     private final MovieSessionMapper movieSessionMapper;
 
+    @Autowired
     public MovieSessionController(MovieSessionService movieSessionService,
                                   MovieSessionMapper movieSessionMapper) {
         this.movieSessionService = movieSessionService;
@@ -31,7 +35,7 @@ public class MovieSessionController {
         movieSessionService.add(movieSessionMapper.convertDtoToMovieSession(movieSessionDto));
     }
 
-    @RequestMapping(value = "/available", method = RequestMethod.GET)
+    @GetMapping("/available")
     public List<MovieSessionResponseDto> getAvailableSessions(
             @RequestParam Long movieId, @RequestParam LocalDate date) {
         return movieSessionService.findAvailableSessions(movieId, date).stream()
