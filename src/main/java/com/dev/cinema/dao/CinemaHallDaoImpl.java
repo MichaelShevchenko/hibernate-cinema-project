@@ -21,4 +21,11 @@ public class CinemaHallDaoImpl extends GenericDaoImpl<CinemaHall> implements Cin
             return getAllCinemaHalls.getResultList();
         }
     }
+
+    @Override
+    public CinemaHall getById(Long cinemaHallId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(CinemaHall.class, cinemaHallId);
+        }
+    }
 }
