@@ -1,27 +1,9 @@
-package com.dev.cinema.model;
+package com.dev.cinema.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "cinema_halls")
-public class CinemaHall {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CinemaHallResponseDto {
     private Long id;
     private int capacity;
     private String description;
-
-    public CinemaHall() {
-    }
-
-    public CinemaHall(int capacity, String description) {
-        this.capacity = capacity;
-        this.description = description;
-    }
 
     public long getId() {
         return id;
@@ -49,7 +31,7 @@ public class CinemaHall {
 
     @Override
     public String toString() {
-        return "CinemaHall{" + "id=" + id + ", capacity=" + capacity
+        return "CinemaHall{" + "capacity=" + capacity
                 + ", description='" + description + '\'' + '}';
     }
 }
