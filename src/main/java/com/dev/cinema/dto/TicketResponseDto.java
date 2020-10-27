@@ -3,7 +3,6 @@ package com.dev.cinema.dto;
 public class TicketResponseDto {
     private Long id;
     private String movieTitle;
-    private Long userId;
 
     public Long getId() {
         return id;
@@ -21,17 +20,8 @@ public class TicketResponseDto {
         this.movieTitle = movieTitle;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     @Override
     public String toString() {
-        return "TicketResponseDto{" + "movieTitle='" + movieTitle + '\''
-                + ", userId=" + userId + '}';
+        return "TicketResponseDto{" + "movieTitle='" + movieTitle + '\'' + '}';
     }
 }
