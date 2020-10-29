@@ -22,6 +22,6 @@ public class TicketResponseDto {
 
     @Override
     public String toString() {
-        return "TicketResponseDto{" + "movieTitle='" + movieTitle + '\'' + '}';
+        return "TicketResponseDto{" + "movieTitle='" + movieTitle + "'}";
     }
 }
