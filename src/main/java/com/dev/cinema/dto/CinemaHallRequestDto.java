@@ -3,7 +3,7 @@ package com.dev.cinema.dto;
 import javax.validation.constraints.NotNull;
 
 public class CinemaHallRequestDto {
-    @NotNull
+    @NotNull(message = "Capacity should not be null")
     private int capacity;
     private String description;
 

@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 public class UserRequestDto {
     @EmailSpecification
     private String email;
-    @NotNull
+    @NotNull(message = "Password should not be null")
     @Size(min = 4)
     private String password;
     private String repeatedPassword;
