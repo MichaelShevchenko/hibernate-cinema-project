@@ -95,16 +95,9 @@ public class Application {
         } catch (Exception e) {
             logger.warn("Registration new user with email ranger@gmail.com failed: " + e);
         }
-        try {
-            logger.info("Attempt to login for texas.ranger@gmail.com email "
-                    + authenticationService.login("texas.ranger@gmail.com", "M@rtia1Arts"));
-        } catch (Exception e) {
-            logger.warn("Login user with texas.ranger@gmail.com email "
-                    + "and M@rtia1Arts password failed: " + e);
-        }
 
         ShoppingCartService shoppingCartService = context.getBean(ShoppingCartService.class);
-        User testUser = userService.findByEmail("ranger@gmail.com").get();
+        User testUser = userService.findByEmail("ranger@gmail.com");
         shoppingCartService.addSession(movieSession2, testUser);
         shoppingCartService.addSession(movieSession4, testUser);
         shoppingCartService.addSession(movieSession2, testUser);
