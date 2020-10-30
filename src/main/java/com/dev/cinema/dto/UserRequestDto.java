@@ -34,6 +34,14 @@ public class UserRequestDto {
         this.password = password;
     }
 
+    public String getPasswordRepeat() {
+        return repeatedPassword;
+    }
+
+    public void setPasswordRepeat(String passwordRepeat) {
+        this.repeatedPassword = passwordRepeat;
+    }
+
     @Override
     public String toString() {
         return "User{" + "email='" + email + '\'' + '}';
