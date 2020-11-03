@@ -22,7 +22,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
             Root<User> root = criteriaQuery.from(User.class);
-            root.fetch("roles", JoinType.LEFT);
+            root.fetch("roles", JoinType.INNER);
             criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), email));
             return session.createQuery(criteriaQuery).uniqueResultOptional();
         }
