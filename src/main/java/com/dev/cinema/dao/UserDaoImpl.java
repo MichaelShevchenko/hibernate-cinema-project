@@ -4,6 +4,7 @@ import com.dev.cinema.model.User;
 import java.util.Optional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,6 +22,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
             Root<User> root = criteriaQuery.from(User.class);
+            root.fetch("roles", JoinType.INNER);
             criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("email"), email));
             return session.createQuery(criteriaQuery).uniqueResultOptional();
         }
